@@ -37,7 +37,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # Создаем кнопки (каждый внутренний список [] — это новый ряд кнопок)
     keyboard = [
         [
-            InlineKeyboardButton("задачечки ٩(××ы)۶", callback_data='list'),
+            InlineKeyboardButton("задачечки ٩(××)۶", callback_data='list'),
             InlineKeyboardButton(" мотивация ♡♡♡", callback_data='motivate')
         ],
         [
@@ -49,16 +49,21 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # Проверяем, откуда пришел запрос (сообщение или кнопка)
     target = update.message if update.message else update.callback_query.message
 
-    await target.reply_photo(
-        photo="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=800",
-        caption=(
-            "ॐ *хай! я ботик, который поможет тебе с задачами!*\n\n"
-            "я милый и у меня скоро будет много новых и прикольных функций!\n"
-            "используй кнопочки ниже или команды из меню."
-        ),
-        reply_markup=reply_markup,
-        parse_mode="Markdown"
-    )
+    try:
+        with open('kote.jpg', 'rb') as photo_file:
+            await target.reply_photo(
+                photo=photo_file,
+                caption=(
+                    "ॐ *хай! я ботик, который поможет тебе с задачами!*\n\n"
+                    "я милый и у меня скоро будет много новых и прикольных функций!\n"
+                    "используй кнопочки ниже или команды из меню."
+                ),
+                reply_markup=reply_markup,
+                parse_mode="Markdown"
+            )
+    except FileNotFoundError:
+        # Это страховка, если вдруг файла 'kote.jpg' нет в папке
+        await target.reply_text("👋 Привет! Я твой бот, но я не нашел свою фотку :(")
 
 async def add(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Добавление задачи через /add текст"""
