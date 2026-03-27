@@ -37,11 +37,11 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # Создаем кнопки (каждый внутренний список [] — это новый ряд кнопок)
     keyboard = [
         [
-            InlineKeyboardButton("📋 Мои задачи", callback_data='list'),
-            InlineKeyboardButton("🚀 Мотивация", callback_data='motivate')
+            InlineKeyboardButton("задачечки ٩(××ы)۶", callback_data='list'),
+            InlineKeyboardButton(" мотивация ♡♡♡", callback_data='motivate')
         ],
         [
-            InlineKeyboardButton("➕ Как добавить?", callback_data='add_help')
+            InlineKeyboardButton(" как добавить?", callback_data='add_help')
         ]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
@@ -52,9 +52,9 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await target.reply_photo(
         photo="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=800",
         caption=(
-            "👋 *Привет! Я твой бот-мотиватор*\n\n"
-            "Я помогу тебе не забить на учебу и задачи.\n"
-            "Используй кнопки ниже или команды из меню."
+            "ॐ *хай! я ботик, который поможет тебе с задачами!*\n\n"
+            "я милый и у меня скоро будет много новых и прикольных функций!\n"
+            "используй кнопочки ниже или команды из меню."
         ),
         reply_markup=reply_markup,
         parse_mode="Markdown"
@@ -64,13 +64,13 @@ async def add(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Добавление задачи через /add текст"""
     task_name = " ".join(context.args)
     if not task_name:
-        await update.message.reply_text("❌ Ошибка! Напиши: `/add учить Python`", parse_mode="Markdown")
+        await update.message.reply_text("❌ ошибка, напиши: `/add учить Python`", parse_mode="Markdown")
         return
     
     tasks = load_tasks()
     tasks.append({"task": task_name, "done": False, "note": ""})
     save_tasks(tasks)
-    await update.message.reply_text(f"✅ Добавлено: *{task_name}*", parse_mode="Markdown")
+    await update.message.reply_text(f" добавил: *{task_name}*", parse_mode="Markdown")
 
 async def list_tasks(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Вывод списка задач (работает и из кнопок, и через /list)"""
@@ -84,10 +84,10 @@ async def list_tasks(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     tasks = load_tasks()
     if not tasks:
-        await target.reply_text("Задач пока нет. Добавь первую через /add!")
+        await target.reply_text("задачек пока нет. добавь их через /add!")
         return
 
-    text = "*Твои задачи:*\n\n"
+    text = "*твои задачки:*\n\n"
     for i, t in enumerate(tasks):
         status = "✅" if t["done"] else "○"
         text += f"{i+1}. {status} {t['task']}\n"
@@ -100,10 +100,10 @@ async def motivate(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if query: await query.answer()
     
     messages = [
-        "🚀 Ты создала этого бота сама! Это уже круче, чем у 90% людей.",
-        "💡 Маленькие шаги ведут к большим результатам.",
-        "⚡ Ошибки в коде — это просто опыт, а не провал.",
-        "🎯 Сфокусируйся на одной задаче и доведи её до конца."
+        "Я не порекомендую секс, наркотики и безумие каждому, но в моем случае они всегда работали отлично.",
+        "Хорошие люди пьют хорошее пиво",
+        "Я обычно плох, но, когда я хорош, я хорош дьявольски.",
+        "Депрессия и самоубийство часто оказывались результатом неправильной диеты."
     ]
     target = update.message if update.message else update.callback_query.message
     await target.reply_text(random.choice(messages))
@@ -119,7 +119,7 @@ async def handle_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await motivate(update, context)
     elif data == 'add_help':
         await query.answer()
-        await query.message.reply_text("Просто напиши в чат: `/add Название задачи`", parse_mode="Markdown")
+        await query.message.reply_text("просто напиши в чатик: `/add название задачки`", parse_mode="Markdown")
 
 # --- ЗАПУСК БОТА ---
 
@@ -139,5 +139,5 @@ if __name__ == '__main__':
         # Регистрация кнопок
         app.add_handler(CallbackQueryHandler(handle_callback))
 
-        print("🚀 Бот запущен и готов к работе!")
+        print("ботик запущен и готов к работе!")
         app.run_polling()
